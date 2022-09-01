@@ -72,3 +72,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # About This Program
 
 This is a newssystem.
+
+## 路由架构
+
+![image-20220901194504892](C:\Users\emeet\AppData\Roaming\Typora\typora-user-images\image-20220901194504892.png)
