@@ -10,9 +10,7 @@ function App () {
     })
   }, [])
   return (
-    <div>
-      <IndexRouter/>
-    </div>
+    <IndexRouter/>
   );
 }
 

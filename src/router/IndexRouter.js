@@ -12,7 +12,7 @@ export default function IndexRouter() {
         <Route path="/login" component={Login} />
         {/* <Route path="/" component={NewsSandBox}/> */}
         <Route path="/" render={()=>
-          localStorage.getItem("token")=="false"?
+          localStorage.getItem("token")?
           <NewsSandBox ></NewsSandBox>:
           <Redirect to="/login"/>
         }/>
