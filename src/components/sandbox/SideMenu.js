@@ -1,15 +1,48 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
+import {withRouter} from 'react-router-dom'
 import './index.css'
 
 
 import { Layout, Menu } from 'antd';
 import {
 } from '@ant-design/icons';
+import axios from 'axios';
 const { Sider } = Layout;
 
 
-export default function SideMenu () {
+function SideMenu (props) {
   const [collapsed] = useState(false);
+  const [menu,setMenu] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/rights?_embed=children").then((resp) => {
+      resp.data.forEach(item => {
+        if (item.children.length == 0) {
+          // delete item.children
+          Reflect.deleteProperty(item, 'children')
+        } else {
+          /* item.children.forEach((child, index) => {
+            console.log(child,child.pagepermisson);
+            if (child.pagepermisson) {
+              // item.children.splice(index, 1); // 继续循环时数组已经被改变了
+            }
+          }) */
+          
+          for(var i=0;i<item.children.length;i++){
+            if(!item.children[i].pagepermisson){
+                // 删除元素
+                item.children.splice(i,1);
+                // 修改i的值！
+                i--;
+            }
+          }
+        }
+      });
+      console.log(resp.data);
+      setMenu(resp.data)
+    })
+  }, [])
+
   /* const items = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
     const key = String(index + 1);
     return {
@@ -52,6 +85,8 @@ export default function SideMenu () {
       getItem('新闻列表', '4')
     ])
   ];
+
+  
   
   return (
     <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -61,8 +96,13 @@ export default function SideMenu () {
         theme="dark"
         mode="inline"
         defaultSelectedKeys={['1']}
-        items={items}
+        items={menu}
+        onClick={(e) => {
+          console.log(props,e.key);
+          props.history.push(e.key)
+        }}
       />
     </Sider>
   )
 }
+export default withRouter(SideMenu)

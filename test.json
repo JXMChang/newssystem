@@ -1,0 +1,25 @@
+{
+  "posts": [
+    {
+      "author": "Eden",
+      "id": 1
+    },
+    {
+      "title": "33333",
+      "author": "xiaoming",
+      "id": 3
+    },
+    {
+      "title": "Eden post",
+      "author": "Eden",
+      "id": 4
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "11111-comment",
+      "postId": 1
+    }
+  ]
+}
