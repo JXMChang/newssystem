@@ -30,11 +30,17 @@ function SideMenu (props) {
           
           for(var i=0;i<item.children.length;i++){
             if(!item.children[i].pagepermisson){
-                // 删除元素
-                item.children.splice(i,1);
-                // 修改i的值！
-                i--;
+              // 删除元素
+              item.children.splice(i,1);
+              if (item.children.length == 0) {
+                // delete item.children
+                Reflect.deleteProperty(item, 'children')
+                break;
+              }
+              // 修改i的值！
+              i--;
             }
+            
           }
         }
       });
@@ -87,21 +93,28 @@ function SideMenu (props) {
   ];
 
   
-  
+  const selectedKey = [props.location.pathname]
+  const openKeys = ["/"+props.location.pathname.split("/")[1]]
+
   return (
     <Sider trigger={null} collapsible collapsed={collapsed}>
-      <div className="logo" >全球新闻发布管理系统</div>
+      <div style={{display:"flex",height:"100%","flexDirection":"column"}}>
 
-      <Menu
-        theme="dark"
-        mode="inline"
-        defaultSelectedKeys={['1']}
-        items={menu}
-        onClick={(e) => {
-          console.log(props,e.key);
-          props.history.push(e.key)
-        }}
-      />
+        <div className="logo" >全球新闻发布管理系统</div>
+
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={selectedKey}
+          defaultOpenKeys={openKeys}
+          items={menu}
+          onClick={(e) => {
+            console.log(props,e.key);
+            props.history.push(e.key)
+          }}
+          style={{flex:1,"overflow":"auto"}}
+          />
+      </div>
     </Sider>
   )
 }
