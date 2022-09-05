@@ -16,6 +16,7 @@ function SideMenu (props) {
 
   useEffect(() => {
     axios.get("http://localhost:8000/rights?_embed=children").then((resp) => {
+      resp.data = resp.data.filter(item => item.pagepermisson);
       resp.data.forEach(item => {
         if (item.children.length == 0) {
           // delete item.children
