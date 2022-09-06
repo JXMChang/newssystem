@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { forwardRef, useState } from 'react'
 import { Form, Input, Select,  } from 'antd'
 const { Option } = Select;
 
-export default function UserForm(props) {
+const UserForm = forwardRef((props, ref) => {
+  const [isDisabledOfRegion, setIsDisabledOfRegion] = useState(false)
+
   return (
     <Form
+      ref={ref}
       name="basic"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
@@ -31,9 +34,9 @@ export default function UserForm(props) {
       <Form.Item
         label="region"
         name="region"
-        rules={[{ required: true, message: 'Please input your region!' }]}
+        rules={isDisabledOfRegion ? [] : [{ required: true, message: 'Please input your region!' }]}
       >
-        <Select>
+        <Select disabled={isDisabledOfRegion}>
           {
             props.regionList.map(item => {
               return <Option value={item.id} key={item.id}>{item.label}</Option>
@@ -47,7 +50,17 @@ export default function UserForm(props) {
         name="roleId"
         rules={[{ required: true, message: 'Please input your roleId!' }]}
       >
-        <Select>
+        <Select onChange={(value) => {
+          if(value == 1){
+            setIsDisabledOfRegion(true);
+            console.log(isDisabledOfRegion);
+            ref.current.setFieldsValue({
+                region:""
+            })
+          }else{
+            setIsDisabledOfRegion(false);
+          }
+        }}>
           {
             props.roleList.map(item => {
               return <Option value={item.value} key={item.id}>{item.roleName}</Option>
@@ -57,4 +70,6 @@ export default function UserForm(props) {
       </Form.Item>
     </Form>
   )
-}
+})
+
+export default UserForm
