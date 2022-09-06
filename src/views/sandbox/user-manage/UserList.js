@@ -10,6 +10,12 @@ export default function UserList() {
   const [roleList, setRoleList] = useState([]);
   const [regionList, setRegionList] = useState([]);
   const addFormRef = useRef(null);
+  const [isUpdateVisible, setIsUpdateVisible] = useState(false);
+  const updateFormRef = useRef(null);
+  const [isUpdateDisabled, setIsUpdateDisabled] = useState(false);
+  const [current, setcurrent] = useState(null);// 存储要更新的item
+
+
 
   useEffect(() => {
     axios.get("http://localhost:8000/users?_expand=role").then((resp) => {
@@ -32,15 +38,27 @@ export default function UserList() {
 
   const columns = [
     {
-        title: '区域',
-        dataIndex: 'region',
-        render: (region) => {
-            return <b>{region === "" ? '全球' : region}</b>
+      title: '区域',
+      dataIndex: 'region',
+      filters: [
+        ...regionList.map(item => ({
+          text: item.label,
+          value:item.value
+        })),
+        {
+          text: "全球",
+          value:"全球"
         }
-    },
-    {
-        title: 'roleId',
-        dataIndex: 'roleId',
+      ],
+      onFilter: (value, item) => {
+        if (value == "全球") {
+          return item.region == "";
+        }
+        return item.region == value;
+      },
+      render: (region) => {
+          return <b>{region === "" ? '全球' : region}</b>
+      }
     },
     {
       title: '角色名称',
@@ -65,7 +83,7 @@ export default function UserList() {
         render: (item) => {
           return <div>
             <Button danger shape="circle" icon={<DeleteOutlined />} onClick={() => confirmMethod(item)} disabled={item.default}/>
-            <Button type="primary" shape="circle" icon={<EditOutlined />}/>
+            <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={()=>handleUpdate(item)}/>
           </div>
         }
     }
@@ -126,6 +144,47 @@ export default function UserList() {
     axios.delete(`http://localhost:8000/users/${item.id}`);
   }
 
+  const handleUpdate = async (item) => {
+    // 异步导致数据未加载
+    /* setIsUpdateVisible(true);
+    updateFormRef.current.setFieldsValue(item); */
+
+    // setcurrent(item);
+    await setIsUpdateVisible(true);
+    // 父子间通信，父组件改变子组件值
+    if( item.roleId === 1 ) {
+      //禁用
+      setIsUpdateDisabled(true);
+    } else {
+        //取消禁用
+      setIsUpdateDisabled(false);
+    }
+    updateFormRef.current.setFieldsValue(item);
+
+    setcurrent(item);
+  }
+
+  const updateFormOK = ()=>{
+    updateFormRef.current.validateFields().then(value => {
+        // console.log(value)
+      setIsUpdateVisible(false);
+
+      setdataSource(dataSource.map(item => {
+        if (item.id === current.id) {
+          return {
+            ...item,
+            ...value,
+            role: roleList.filter(data => data.id === value.roleId)[0]
+          }
+        }
+        return item
+      }));
+      setIsUpdateDisabled(!isUpdateDisabled);
+
+      axios.patch(`http://localhost:8000/users/${current.id}`, value);
+    })
+  }
+
 
   return (
     <div>
@@ -150,6 +209,20 @@ export default function UserList() {
         onOk={() => addFormOK()}
       >
         <UserForm regionList={regionList} roleList={roleList} ref={addFormRef}></UserForm>
+      </Modal>
+
+      <Modal
+        visible={isUpdateVisible}
+        title="更新用户"
+        okText="更新"
+        cancelText="取消"
+        onCancel={() => {
+            setIsUpdateVisible(false)
+            setIsUpdateDisabled(!isUpdateDisabled)
+        }}
+        onOk={() => updateFormOK()}
+      >
+        <UserForm regionList={regionList} roleList={roleList} ref={updateFormRef} isUpdateDisabled={isUpdateDisabled} isUpdate={true}></UserForm>
       </Modal>
     </div>
   )

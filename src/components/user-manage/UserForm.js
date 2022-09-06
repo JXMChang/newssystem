@@ -1,10 +1,12 @@
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { Form, Input, Select,  } from 'antd'
 const { Option } = Select;
 
 const UserForm = forwardRef((props, ref) => {
   const [isDisabledOfRegion, setIsDisabledOfRegion] = useState(false)
-
+  useEffect(() => {
+    setIsDisabledOfRegion(props.isUpdateDisabled);
+  }, [props.isUpdateDisabled]);
   return (
     <Form
       ref={ref}
@@ -39,7 +41,7 @@ const UserForm = forwardRef((props, ref) => {
         <Select disabled={isDisabledOfRegion}>
           {
             props.regionList.map(item => {
-              return <Option value={item.id} key={item.id}>{item.label}</Option>
+              return <Option value={item.label} key={item.id}>{item.label}</Option>
             })
           }
         </Select>
@@ -63,7 +65,7 @@ const UserForm = forwardRef((props, ref) => {
         }}>
           {
             props.roleList.map(item => {
-              return <Option value={item.value} key={item.id}>{item.roleName}</Option>
+              return <Option value={item.id} key={item.id}>{item.roleName}</Option>
             })
           }
         </Select>

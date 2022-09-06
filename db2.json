@@ -10,7 +10,7 @@
       "roleId": 1
     },
     {
-      "username": "铁锤",
+      "username": "铁锤1",
       "password": "123",
       "roleState": true,
       "default": false,
@@ -57,7 +57,7 @@
     {
       "username": "司马海味",
       "password": "123",
-      "roleState": true,
+      "roleState": false,
       "default": false,
       "region": "亚洲",
       "roleId": 3,
