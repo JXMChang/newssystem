@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import './NewsSandBox.css'
 
@@ -9,8 +9,16 @@ import TopHeader from '../../components/sandbox/TopHeader'
 
 import { Layout } from 'antd';
 import NewsRouter from '../../components/sandbox/NewsRouter'
+
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 const { Content } = Layout;
-export default function NewsSandBox() {
+export default function NewsSandBox () {
+  NProgress.start();
+  useEffect(() => {
+    NProgress.done();
+  })
   return (
     <Layout>
       <SideMenu />
