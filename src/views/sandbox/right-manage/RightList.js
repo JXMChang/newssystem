@@ -8,7 +8,7 @@ export default function RightList () {
   const [dataSource, setDataSource] = useState([ ])
 
   useEffect(() => {
-    axios.get("http://localhost:8000/rights?_embed=children").then((resp) => {
+    axios.get("/rights?_embed=children").then((resp) => {
       const list = resp.data
 
       list.forEach(item => {
@@ -80,14 +80,14 @@ export default function RightList () {
     if (item.grade === 1) {
       // 一级权限
       setDataSource(dataSource.filter((data) => { return data.id != item.id }));
-      axios.delete(`http://localhost:8000/rights/${item.id}`);
+      axios.delete(`/rights/${item.id}`);
     } else {
       // 二级权限
       const parentRight = dataSource.filter((data) => { return data.id == item.rightId })
       parentRight[0].children = parentRight[0].children.filter((data) => { return data.id != item.id })
       console.log(dataSource);
       setDataSource([...dataSource])
-      axios.delete(`http://localhost:8000/children/${item.id}`)
+      axios.delete(`/children/${item.id}`)
     }
     
   }
@@ -97,11 +97,11 @@ export default function RightList () {
     console.log("switchMethod",dataSource);
     setDataSource([...dataSource])
     if(item.grade === 1){
-      axios.patch(`http://localhost:8000/rights/${item.id}`, {
+      axios.patch(`/rights/${item.id}`, {
         pagepermisson: item.pagepermisson
       });
     }else{
-      axios.patch(`http://localhost:8000/children/${item.id}`, {
+      axios.patch(`/children/${item.id}`, {
         pagepermisson: item.pagepermisson
       });
     }

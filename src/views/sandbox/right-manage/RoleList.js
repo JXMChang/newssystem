@@ -12,13 +12,13 @@ export default function RoleList() {
   const [currentId, setCurrentId] = useState(0); // 记录id，以便点击OK时更新dataSource
 
   useEffect(() => {
-    axios.get("http://localhost:8000/roles").then((resp) => {
+    axios.get("/roles").then((resp) => {
       setDataSource(resp.data)
     })
   }, [])
 
   useEffect(() => {
-    axios.get("http://localhost:8000/rights?_embed=children").then((resp) => {
+    axios.get("/rights?_embed=children").then((resp) => {
       const list = resp.data
 
       list.forEach(item => {
@@ -77,7 +77,7 @@ export default function RoleList() {
   const deleteMethod = (item) => {
     // console.log(item)
     setDataSource(dataSource.filter(data => data.id !== item.id))
-    axios.delete(`http://localhost:8000/roles/${item.id}`)
+    axios.delete(`/roles/${item.id}`)
   };
 
   const handleOk = () => {
@@ -94,7 +94,7 @@ export default function RoleList() {
       return item;
     }))
 
-    axios.patch(`http://localhost:8000/roles/${currentId}`, {
+    axios.patch(`/roles/${currentId}`, {
       rights:currentRights
     })
 

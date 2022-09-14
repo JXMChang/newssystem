@@ -42,8 +42,8 @@ export default function NewsRouter () {
 
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:8000/rights"),
-      axios.get("http://localhost:8000/children"),
+      axios.get("/rights"),
+      axios.get("/children"),
     ]).then(resp => {
       setBackRouteList([...resp[0].data, ...resp[1].data])
 

@@ -18,20 +18,20 @@ export default function UserList() {
 
 
   useEffect(() => {
-    axios.get("http://localhost:8000/users?_expand=role").then((resp) => {
+    axios.get("/users?_expand=role").then((resp) => {
       setdataSource(resp.data);
     });
   }, [])
 
   useEffect(() => {
-    axios.get("http://localhost:8000/regions").then(resp => {
+    axios.get("/regions").then(resp => {
       setRegionList(resp.data)
       console.log(regionList);
     })
   }, [])
 
   useEffect(() => {
-    axios.get("http://localhost:8000/roles").then(resp => {
+    axios.get("/roles").then(resp => {
       setRoleList(resp.data)
     })
   }, [])
@@ -92,7 +92,7 @@ export default function UserList() {
     item.roleState = !item.roleState;
     setdataSource([...dataSource]);
 
-    axios.patch(`http://localhost:8000/users/${item.id}`, {
+    axios.patch(`/users/${item.id}`, {
       roleState: item.roleState
     });
   }
@@ -106,7 +106,7 @@ export default function UserList() {
       addFormRef.current.resetFields();
 
       //post到后端，生成id，再设置 datasource, 方便后面的删除和更新
-      axios.post(`http://localhost:8000/users`, {
+      axios.post(`/users`, {
         ...value,
         "roleState": true,
         "default": false,
@@ -141,7 +141,7 @@ export default function UserList() {
     // console.log(item)
     // 当前页面同步状态 + 后端同步
     setdataSource(dataSource.filter(data => data.id !== item.id));
-    axios.delete(`http://localhost:8000/users/${item.id}`);
+    axios.delete(`/users/${item.id}`);
   }
 
   const handleUpdate = async (item) => {
@@ -181,7 +181,7 @@ export default function UserList() {
       }));
       setIsUpdateDisabled(!isUpdateDisabled);
 
-      axios.patch(`http://localhost:8000/users/${current.id}`, value);
+      axios.patch(`/users/${current.id}`, value);
     })
   }
 
