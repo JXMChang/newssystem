@@ -5,8 +5,9 @@ import {
   UserOutlined 
 } from '@ant-design/icons';
 import { Layout,Dropdown, Menu,Avatar  } from 'antd';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 const { Header } = Layout;
-export default function TopHeader () {
+function TopHeader (props) {
   const [collapsed, setCollapsed] = useState(false);
   const menu = (
     <Menu
@@ -14,17 +15,21 @@ export default function TopHeader () {
         {
           key: '1',
           label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+            <span>
               超级管理员
-            </a>
+            </span>
           ),
         },
         {
           key: '2',
           label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+            <span  onClick={()=>{
+              localStorage.removeItem("token")
+              // console.log(props.history)
+              props.history.replace("/login")
+            }}>
               退出
-            </a>
+            </span>
           ),
           danger: true,
         },
@@ -55,3 +60,4 @@ export default function TopHeader () {
     </Header>
   )
 }
+export default withRouter(TopHeader)
