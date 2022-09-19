@@ -116,7 +116,7 @@ export default function NewsAdd (props) {
         >
           <Form.Item
             label="新闻标题"
-            name="title"
+            name="label"
             rules={[
               {
                 required: true,
@@ -135,7 +135,7 @@ export default function NewsAdd (props) {
             <Select>
               {
                 categoryList.map(item =>
-                  <Option value={item.id} key={item.id}>{item.title}</Option>
+                  <Option value={item.id} key={item.id}>{item.label}</Option>
                 )
               }
             </Select>
