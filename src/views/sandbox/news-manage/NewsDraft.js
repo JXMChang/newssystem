@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined,UploadOutlined 
 import axios from 'axios'
 
 const { confirm } = Modal;
-export default function NewsDraft () {
+export default function NewsDraft (props) {
   const [dataSource, setDataSource] = useState([ ])
   const {username}  = JSON.parse(localStorage.getItem("token"))
 
@@ -48,7 +48,9 @@ export default function NewsDraft () {
       render: (item) => {
         return <div>
           <Button danger type="primary" shape="circle" icon={<DeleteOutlined />} onClick={()=>{confirmMethod(item)}}></Button>
-          <Button shape="circle" icon={<EditOutlined />}></Button>
+          <Button shape="circle" icon={<EditOutlined />} onClick={() => {
+            props.history.push(`/news-manage/update/${item.id}`)
+          }}></Button>
 
           <Button type="primary" shape="circle" icon={<UploadOutlined />}></Button>
 
