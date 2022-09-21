@@ -28,10 +28,13 @@ export default function NewsDraft () {
       title: '新闻标题',
       dataIndex: 'label',
       key: 'label',
+      render: (title, item) => {
+        return <a href={`#/news-manage/preview/${item.id}`}>{title}</a>
+      }
     },
     {
       title: '作者',
-      dataIndex: 'author'
+      dataIndex: 'author',
     },
     {
         title: '分类',

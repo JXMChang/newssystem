@@ -54,7 +54,7 @@ export default function NewsRouter () {
   
   // 判断在权限列表中是否打开开关
   const checkRoute = (item) => {
-    return LocalRouterMap[item.key] && item.pagepermisson
+    return LocalRouterMap[item.key] && (item.pagepermisson || item.routepermisson)
     
   }
 
