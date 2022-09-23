@@ -7,11 +7,12 @@ import { Layout, Menu } from 'antd';
 import {
 } from '@ant-design/icons';
 import axios from 'axios';
+import { connect } from 'react-redux';
 const { Sider } = Layout;
 
 
 function SideMenu (props) {
-  const [collapsed] = useState(false);
+  // const [collapsed] = useState(false);
   const [menu,setMenu] = useState([]);
 
   useEffect(() => {
@@ -98,7 +99,7 @@ function SideMenu (props) {
   const openKeys = ["/"+props.location.pathname.split("/")[1]]
 
   return (
-    <Sider trigger={null} collapsible collapsed={collapsed}>
+    <Sider trigger={null} collapsible collapsed={props.isCollapsed}>
       <div style={{display:"flex",height:"100%","flexDirection":"column"}}>
 
         <div className="logo" >全球新闻发布管理系统</div>
@@ -119,4 +120,10 @@ function SideMenu (props) {
     </Sider>
   )
 }
-export default withRouter(SideMenu)
+
+const mapStateToProps = ({CollApsedReducer:{isCollapsed}})=>({
+  isCollapsed
+})
+
+export default connect(mapStateToProps)(withRouter(SideMenu))
+// ES7装饰器

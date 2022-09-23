@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 const { Header } = Layout;
 function TopHeader (props) {
   console.log("TopHeader",props);
-  const [collapsed, setCollapsed] = useState(false);
+  // const [collapsed, setCollapsed] = useState(false);
   const menu = (
     <Menu
       items={[
@@ -48,9 +48,9 @@ function TopHeader (props) {
       {/* {
         collapsed ? <MenuUnfoldOutlined onClick={ () => setCollapsed(!collapsed) }/>:<MenuFoldOutlined  onClick={ () => setCollapsed(!collapsed) }/>
       } */}
-      {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+      {React.createElement(props.isCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
         className: 'trigger',
-        onClick: () => setCollapsed(!collapsed),
+        onClick: () => {props.changeCollapsed()},
       })}
 
       <div style={{float:"right"}}>
@@ -81,5 +81,15 @@ const mapStateToProps = ({CollApsedReducer:{isCollapsed}}) => {
   }
 }
 
-export default connect(mapStateToProps)(withRouter(TopHeader))
+// 将dispatch映射成props，就不用自己调用store.dispatch()了
+const mapDispatchToProps = {
+  changeCollapsed(){
+    return {
+      type: "change_collapsed"
+      // payload:
+    };//action 
+}
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(TopHeader))
 // export default connect(withRouter(TopHeader))
