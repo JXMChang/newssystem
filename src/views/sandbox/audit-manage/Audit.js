@@ -21,14 +21,6 @@ export default function Audit() {
       ])
     })
   }, [roleId, region, username]);
-  useEffect(() => {
-    console.log("lodash");
-    axios.get("/news?publishState=2&_expand=category").then(res => {
-      console.log(res.data);
-      console.log(_.groupBy(res.data, item => item.category.label))
-      console.log(Object.entries(_.groupBy(res.data, item => item.category.label)))
-    })
-}, [])
   const columns = [
     {
       title: '新闻标题',
