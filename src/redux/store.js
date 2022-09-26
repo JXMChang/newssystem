@@ -1,17 +1,43 @@
 // import {createStore} from 'redux'; // 已被弃用
 
-import { legacy_createStore,combineReducers} from 'redux'; // 已被弃用
+import { legacy_createStore,combineReducers,applyMiddleware,compose} from 'redux'; // 已被弃用
 import {CollApsedReducer} from './reducers/CollapsedReducer'
 import {LoadingReducer} from './reducers/LoadingReducer'
+
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import { persistStore, persistReducer } from 'redux-persist'
+
+import reduxThunk from 'redux-thunk'
+import reduxPromise from 'redux-promise'
+ 
 
 const reducer = combineReducers({
   CollApsedReducer,
   LoadingReducer
 })
 
-const store = legacy_createStore(reducer);
+// redux-persist：redux持久化，即与localStorage交互
+const persistConfig = {
+  key: 'isCollapsed',
+  storage,
+  whitelist:['CollApsedReducer']
+  // blacklist: ['LoadingReducer'] 
 
-export default store
+}
+// 把reducer按照persistConfig配置持久化
+const persistedReducer = persistReducer(persistConfig,reducer)
+// const store = legacy_createStore(persistedReducer);
+
+// Redux开发者工具
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = legacy_createStore(persistedReducer,composeEnhancers(applyMiddleware(reduxThunk,reduxPromise)));
+
+const persistor = persistStore(store);
+
+export {
+  store,
+  persistor
+}
 
 /* store原理：订阅发布模式
 
