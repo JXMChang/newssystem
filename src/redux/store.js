@@ -2,9 +2,11 @@
 
 import { legacy_createStore,combineReducers} from 'redux'; // 已被弃用
 import {CollApsedReducer} from './reducers/CollapsedReducer'
+import {LoadingReducer} from './reducers/LoadingReducer'
 
 const reducer = combineReducers({
-  CollApsedReducer
+  CollApsedReducer,
+  LoadingReducer
 })
 
 const store = legacy_createStore(reducer);
