@@ -28,6 +28,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig,reducer)
 // const store = legacy_createStore(persistedReducer);
 
+
 // Redux开发者工具
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = legacy_createStore(persistedReducer,composeEnhancers(applyMiddleware(reduxThunk,reduxPromise)));
