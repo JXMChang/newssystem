@@ -5,6 +5,7 @@ import axios from 'axios';
 const { Meta } = Card;
 
 export default function Home () {
+  
   const [viewList, setViewList] = useState([]);
   const [starList, setStarList] = useState([]);
 
