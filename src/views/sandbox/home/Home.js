@@ -1,45 +1,83 @@
-import React from 'react'
-import { Button } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Card, Col, Row,List,Avatar } from 'antd';
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import axios from 'axios';
+const { Meta } = Card;
+
 export default function Home () {
-  const getData = () => {
-    // 取：get
-    /* axios.get("/posts/1").then((resp) => {
-      console.log(resp.data);
-    }) */
+  const [viewList, setViewList] = useState([]);
+  const [starList, setStarList] = useState([]);
 
-    // 取：post
-    /* axios.post("/posts", {
-      title: "Eden post",
-      author:"Eden"
-    }) */
+  const { username, region, role: { roleName } } = JSON.parse(localStorage.getItem("token"))
 
-    // 修改：put，会将其他未传入的属性删除
-    /* axios.put("/posts/1", {
-      author:"Eden"
-    }) */
+  useEffect(() => {
+    axios.get("/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6").then(res => {
+      // console.log(res.data)
+      setViewList(res.data);
+    })
+  }, []);
 
-    // 修改：put，只会更新传入的属性
-    /* axios.patch("/posts/2", {
-      author:"Eden"
-    }) */
-
-    // 删除：delete 会将有关联的数据表中的数据删除
-    // axios.delete("/posts/2")
-
-    // _embed：取有关联的数据表（向下关联：新闻——>评论）
-    /* axios.get("/posts?_embed=comments").then((resp) => {
-      console.log(resp);
-    }) */
-
-    // _expand：取有关联的数据表（向上关联：评论——>新闻）
-    /* axios.get("/comments?_expand=post").then((resp) => {
-      console.log(resp);
-    }) */
-  }
+  useEffect(() => {
+    axios.get("/news?publishState=2&_expand=category&_sort=star&_order=desc&_limit=6").then(res => {
+      // console.log(res.data)
+      setStarList(res.data);
+    })
+  }, []);
+  
   return (
-    <div>
-      <Button type="primary" onClick={getData}>Primary Button</Button>
+    <div className="site-card-wrapper">
+      <Row gutter={16}>
+        <Col span={8}>
+          <Card title="用户最常浏览" bordered={true}>
+          <List
+            size="small"
+            dataSource={viewList}
+              renderItem={(item) => <List.Item>
+                <a href={`#/news-manage/preview/${item.id}`}>{item.label}</a>
+              </List.Item>}
+          />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card title="用户点赞最多" bordered={true}>
+            <List
+              size="small"
+              dataSource={starList}
+              renderItem={(item) => <List.Item>
+                <a href={`#/news-manage/preview/${item.id}`}>{item.label}</a>
+              </List.Item>}
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
+        <Card
+          cover={
+            <img
+              alt="example"
+              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+            />
+          }
+          actions={[
+            <SettingOutlined key="setting" />,
+            <EditOutlined key="edit" />,
+            <EllipsisOutlined key="ellipsis" />,
+          ]}
+        >
+          <Meta
+            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+            title={username}
+            description={
+              <div>
+                <b>{region ? region : "全球"}</b>
+                <span style={{
+                    paddingLeft: "30px"
+                }}>{roleName}</span>
+              </div>
+            }
+          />
+        </Card>
+        </Col>
+      </Row>
     </div>
   )
 }
