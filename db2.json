@@ -559,12 +559,13 @@
       "region": "全球",
       "author": "admin",
       "roleId": 1,
-      "auditState": 1,
-      "publishState": 0,
+      "auditState": 2,
+      "publishState": 2,
       "createTime": 1663588653663,
       "star": 0,
       "view": 0,
-      "id": 10
+      "id": 10,
+      "publishTime": 1664278542870
     },
     {
       "label": "aaabb",
@@ -616,8 +617,8 @@
       "region": "全球",
       "author": "admin",
       "roleId": 1,
-      "auditState": 0,
-      "publishState": 0,
+      "auditState": 2,
+      "publishState": 1,
       "createTime": 1663932040222,
       "star": 0,
       "view": 0,

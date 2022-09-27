@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Card, Col, Row,List,Avatar } from 'antd';
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import * as Echarts from 'echarts'
+import _ from 'lodash'
+
 const { Meta } = Card;
 
 export default function Home () {
@@ -10,6 +13,8 @@ export default function Home () {
   const [starList, setStarList] = useState([]);
 
   const { username, region, role: { roleName } } = JSON.parse(localStorage.getItem("token"))
+
+  const barRef = useRef();
 
   useEffect(() => {
     axios.get("/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6").then(res => {
@@ -24,6 +29,49 @@ export default function Home () {
       setStarList(res.data);
     })
   }, []);
+
+  useEffect(() => {
+    axios.get("/news?publishState=2&_expand=category").then(res => {
+      console.log(res.data)
+      console.log(_.groupBy(res.data, item => item.category.label))
+      renderBarView(_.groupBy(res.data, item => item.category.label))
+
+      // setallList(res.data)
+    })
+    
+    
+  }, []);
+
+  const renderBarView = (obj) => {
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = Echarts.init(barRef.current);
+
+    // 指定图表的配置项和数据
+    var option = {
+      title: {
+        text: '新闻分类图示'
+      },
+      tooltip: {},
+      legend: {
+        data: ['数量']
+      },
+      xAxis: {
+        data: Object.keys(obj)
+      },
+      yAxis: {},
+      series: [
+        {
+          name: '数量',
+          type: 'bar',
+          data: Object.values(obj).map(item => item.length)
+          
+        }
+      ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+  }
   
   return (
     <div className="site-card-wrapper">
@@ -79,6 +127,12 @@ export default function Home () {
         </Card>
         </Col>
       </Row>
+    
+      <div ref={barRef} style={{
+        width: '100%',
+        height: "400px",
+        marginTop: "30px"
+      }}></div>
     </div>
   )
 }
