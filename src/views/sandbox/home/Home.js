@@ -39,6 +39,9 @@ export default function Home () {
       // setallList(res.data)
     })
     
+    return () => {
+      window.onresize = null;
+    }
     
   }, []);
 
@@ -56,9 +59,15 @@ export default function Home () {
         data: ['数量']
       },
       xAxis: {
-        data: Object.keys(obj)
+        data: Object.keys(obj),
+        axisLabel: {
+          rotate: "45", // 解决宽度太小显示不全问题
+          interval: 0 // 强制显示所有标签
+        }
       },
-      yAxis: {},
+      yAxis: {
+        minInterval: 1,
+      },
       series: [
         {
           name: '数量',
@@ -71,6 +80,12 @@ export default function Home () {
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+
+    // 响应式
+    window.onresize = () => {
+      console.log("resize")
+      myChart.resize();
+    }
   }
   
   return (
@@ -130,7 +145,7 @@ export default function Home () {
     
       <div ref={barRef} style={{
         width: '100%',
-        height: "400px",
+        height: "300px",
         marginTop: "30px"
       }}></div>
     </div>
