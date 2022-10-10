@@ -20,6 +20,7 @@ function SideMenu (props) {
       resp.data = resp.data.filter(item => item.pagepermisson);
       resp.data.forEach(item => {
         if (item.children.length == 0) {
+          // Warn：使用 delete 关键字动态删除属性和动态添加属性会导致生成相同的隐藏类片段。最佳实践是把不想要的属性设置为 null。这样可以保持隐藏类不变和继续共享，同时也能达到删除引用值供垃圾回收程序回收的效果
           // delete item.children
           Reflect.deleteProperty(item, 'children')
         } else {
